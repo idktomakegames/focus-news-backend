@@ -7,6 +7,8 @@ import resetRouter from "./routes/resetPassword.js";
 import authRouter from "./routes/auth.js";
 import rateLimit from 'express-rate-limit';
 import helmet from "helmet";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 app.use(helmet());
