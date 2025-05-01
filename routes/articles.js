@@ -76,6 +76,8 @@ articleRouter.post('/post-article', async (req, res) => {
 
 articleRouter.get('/get-articles/:page', async (req, res) => {
     const { page } = req.params;
+    console.log(page);
+    
     
     const currentPage = parseInt(page)
 
