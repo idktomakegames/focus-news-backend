@@ -29,7 +29,7 @@ resetRouter.post("/reset-password", async (req, res) => {
 
     const link = `https://focus-news.netlify.app/reset/password/${token}`
 
-    const html = `<p>Hello,</p><p>Urmează acest link pentru a-ți reseta parola pentru contul ${email}</p> <a href='${link}'>${link}</a><p>Dacă nu ați solicitat pentru resetarea parolei, puteți ignora acest email.</p> <p>Focus Giurgiu</p>`
+    const html = `<p>Salutare,</p><p>Urmează acest link pentru a-ți reseta parola pentru contul ${email}</p> <a href='${link}'>${link}</a><p>Dacă nu ați solicitat pentru resetarea parolei, puteți ignora acest email.</p> <p>@Focus Giurgiu</p>`
 
     transporter.sendMail({
         from: "redactiafocusgiurgiu@gmail.com",
