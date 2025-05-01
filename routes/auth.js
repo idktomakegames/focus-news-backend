@@ -6,6 +6,8 @@ import bcrypt from 'bcrypt';
 
 authRouter.get('/check/permissions', (req, res) => {
     const token = req.cookies.jwt;
+    console.log(req.cookies);
+    
 
     if(!token){
         return res.status(401).json("Unauthorized");
@@ -18,6 +20,7 @@ authRouter.get('/check/permissions', (req, res) => {
         
         const username = decode.username;
         const role = decode.role;
+        
         return res.json({username: username, role: role});
     })
 })
