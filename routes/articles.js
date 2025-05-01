@@ -68,8 +68,6 @@ articleRouter.post('/post-article', async (req, res) => {
         imageUrl: imageUrl
     });
 
-    console.log(article)
-
     return res.status(201).json("Article uploaded successfully")
     } catch (error) {
         return res.status(500).json("Something went wrong")
@@ -204,7 +202,6 @@ articleRouter.delete('/delete/article', async (req, res) => {
         }
 
         await Article.deleteOne({_id: article._id});
-        console.log(article)
         return res.json({message: "Article deleted successfully", title: article.title });
     } catch (err) {
         return res.status(500).json("Internal server error");
