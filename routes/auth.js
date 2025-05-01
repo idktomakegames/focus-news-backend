@@ -52,7 +52,7 @@ authRouter.post('/signup', async (req, res) => {
             role: newUser.role
         }, process.env.JWT_SECRET, {expiresIn: "48h"});
         console.log(newUser);
-        return res.cookie("jwt", token, {httpOnly: true, secure: true, sameSite: "none", maxAge: 48 * 60 * 60 * 1000}).status(201).json("Contul a fost creat cu succes");
+        return res.cookie("jwt", token, {httpOnly: true, secure: true, sameSite: "none", maxAge: 48 * 60 * 60 * 1000, path: '/'}).status(201).json("Contul a fost creat cu succes");
 
     } catch (err) {
         return res.status(500).json("Eroare internă a serverului. Te rugăm să încerci din nou mai târziu.")
@@ -81,7 +81,7 @@ authRouter.post('/login', async (req, res) => {
                 role: user.role
             }, process.env.JWT_SECRET, {expiresIn: "48h"});
 
-            return res.cookie("jwt", token, {httpOnly: true, secure: true, sameSite: "none", maxAge: 48 * 60 * 60 * 1000}).json("Autentificare reușită!");
+            return res.cookie("jwt", token, {httpOnly: true, secure: true, sameSite: "none", maxAge: 48 * 60 * 60 * 1000, path: '/'}).json("Autentificare reușită!");
         } else {
             return res.status(401).json("Autentificare eșuată");
         }
@@ -92,7 +92,7 @@ authRouter.post('/login', async (req, res) => {
 
 
 authRouter.get('/logout', (req, res) => {
-    return res.clearCookie("jwt", {httpOnly: true, secure: true, sameSite: "none", maxAge: 48 * 60 * 60 * 1000}).sendStatus(204);
+    return res.clearCookie("jwt", {httpOnly: true, secure: true, sameSite: "none", maxAge: 48 * 60 * 60 * 1000, path: '/'}).sendStatus(204);
 });
 
 export default authRouter;
