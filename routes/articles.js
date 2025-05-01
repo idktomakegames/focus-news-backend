@@ -85,9 +85,9 @@ articleRouter.get('/get-articles/:page', async (req, res) => {
         return res.sendStatus(400);
     }
     
-    const articles = await Article.find().sort({createdAt: -1}).skip((currentPage - 1) * 10).limit(4);
+    const articles = await Article.find().sort({createdAt: -1}).skip((currentPage - 1) * 9).limit(9);
     const totalArticles = await Article.countDocuments();
-    const totalPages = Math.ceil(totalArticles / 4)
+    const totalPages = Math.ceil(totalArticles / 9)
     return res.json({totalPages: totalPages, articles: articles})
 });
 
