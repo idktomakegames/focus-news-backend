@@ -101,9 +101,9 @@ articleRouter.get('/get-articles/category/economie/:page', async (req, res) => {
         return res.sendStatus(400);
     }
     
-    const articles = await Article.find({category: "economie"}).sort({createdAt: -1}).skip((currentPage - 1) * 10).limit(9);
+    const articles = await Article.find({category: "economie"}).sort({createdAt: -1}).skip((currentPage - 1) * 9).limit(9);
     const totalArticles = await Article.countDocuments({category: "economie"});
-    const totalPages = Math.ceil(totalArticles / 10)
+    const totalPages = Math.ceil(totalArticles / 9)
     return res.json({totalPages: totalPages, articles: articles})
 
 });
@@ -118,9 +118,9 @@ articleRouter.get('/get-articles/category/infrastructura/:page', async (req, res
         return res.sendStatus(400);
     }
     
-    const articles = await Article.find({category: "infrastructura"}).sort({createdAt: -1}).skip((currentPage - 1) * 10).limit(9);
+    const articles = await Article.find({category: "infrastructura"}).sort({createdAt: -1}).skip((currentPage - 1) * 9).limit(9);
     const totalArticles = await Article.countDocuments({category: "infrastructura"});
-    const totalPages = Math.ceil(totalArticles / 10)
+    const totalPages = Math.ceil(totalArticles / 9)
     return res.json({totalPages: totalPages, articles: articles})
 });
 
@@ -134,9 +134,9 @@ articleRouter.get('/get-articles/category/sanatate/:page', async (req, res) => {
         return res.sendStatus(400);
     }
     
-    const articles = await Article.find({category: "sanatate"}).sort({createdAt: -1}).skip((currentPage - 1) * 10).limit(9);
+    const articles = await Article.find({category: "sanatate"}).sort({createdAt: -1}).skip((currentPage - 1) * 9).limit(9);
     const totalArticles = await Article.countDocuments({category: "sanatate"});
-    const totalPages = Math.ceil(totalArticles / 10)
+    const totalPages = Math.ceil(totalArticles / 9)
     return res.json({totalPages: totalPages, articles: articles})
 });
 
@@ -150,9 +150,9 @@ articleRouter.get('/get-articles/category/tragedii/:page', async (req, res) => {
         return res.sendStatus(400);
     }
     
-    const articles = await Article.find({category: "tragedii"}).sort({createdAt: -1}).skip((currentPage - 1) * 10).limit(9);
+    const articles = await Article.find({category: "tragedii"}).sort({createdAt: -1}).skip((currentPage - 1) * 9).limit(9);
     const totalArticles = await Article.countDocuments({category: "tragedii"});
-    const totalPages = Math.ceil(totalArticles / 10)
+    const totalPages = Math.ceil(totalArticles / 9)
     return res.json({totalPages: totalPages, articles: articles})
 });
 
