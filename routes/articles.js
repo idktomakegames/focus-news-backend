@@ -182,7 +182,6 @@ articleRouter.get('/search/:query', async (req, res) => {
 
 articleRouter.delete('/delete/article', async (req, res) => {
     const { query } = req.body;
-    console.log(query);
     
     const token = req.cookies.jwt;
 
