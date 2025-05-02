@@ -160,7 +160,7 @@ articleRouter.get('/article/:id', async (req, res) => {
     const id = req.params.id;
     console.log(id);
     
-    const article = await Article.findOne({id: _id});
+    const article = await Article.findOne({_id: id});
 
     if(article == null){
         return res.status(404).json("Article not found")
