@@ -157,9 +157,10 @@ articleRouter.get('/get-articles/category/tragedii/:page', async (req, res) => {
 });
 
 articleRouter.get('/article/:id', async (req, res) => {
-    const title = req.params.id;
-
-    const article = await Article.findOne({title: title});
+    const id = req.params.id;
+    console.log(id);
+    
+    const article = await Article.findOne({id: _id});
 
     if(article == null){
         return res.status(404).json("Article not found")
