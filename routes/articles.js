@@ -182,6 +182,8 @@ articleRouter.get('/search/:query', async (req, res) => {
 
 articleRouter.delete('/delete/article', async (req, res) => {
     const { query } = req.body;
+    console.log(query);
+    
     const token = req.cookies.jwt;
 
     if(!token){
@@ -199,13 +201,13 @@ articleRouter.delete('/delete/article', async (req, res) => {
     });
 
     try {
-        const article = await Article.findOne({title: { $regex: new RegExp(query, 'i')}});
+        const article = await Article.findOne({_id: query});
         if(!article){
             return res.status(404).json({message: "Article not found"})
         }
 
         await Article.deleteOne({_id: article._id});
-        return res.json({message: "Article deleted successfully", title: article.title });
+        return res.json({message: "Article deleted successfully"});
     } catch (err) {
         return res.status(500).json("Internal server error");
     }  
