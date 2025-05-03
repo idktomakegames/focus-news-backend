@@ -219,18 +219,31 @@ articleRouter.post('/like/article', async (req, res) => {
         const currentArticle = await Article.findOne({_id: article._id});
 
         if(!currentArticle){
-            return res.status(404).json("Article not found");
+            return res.sendStatus(404);
         }
         
         currentArticle.likes += liked ? 1 : -1;
-
         await currentArticle.save();
-
-        return res.json({likes: currentArticle.likes});
-
+        return res.sendStatus(204);
     } catch (err) {
-        return res.status(500).json("Internal server error");
+        return res.sendStatus(500);
     }  
 });
+
+articleRouter.get('/total-likes/:article', async (req, res) => {
+    const articleID = req.params.article;
+
+    try {
+        const currentArticle = await Article.findOne({_id: articleID})
+
+        if(!currentArticle){
+            return res.status(404).json("Article not found")
+        }
+
+        return res.json(currentArticle.likes);
+    } catch (error) {
+        return res.status.json("Internal Server Error")
+    }
+})
 
 export default articleRouter;
