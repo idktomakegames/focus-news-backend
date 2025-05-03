@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { SchemaType } from "mongoose";
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -37,11 +37,8 @@ const articleSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    likes: {
-        type: Number,
-        default: 0,
-        min: 0
-    }
+    likes: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}]
+        
 }, {timestamps: true})
 
 export const User = mongoose.model("User", userSchema);
