@@ -15,8 +15,8 @@ app.set('trust proxy', 1);
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-const options = ["https://focus-giurgiu.ro", "https://focus-giurgiu.netlify.app"]
-app.use(cors({origin: options, credentials: true}));
+// const options = ["https://focus-giurgiu.ro", "https://focus-giurgiu.netlify.app"]
+app.use(cors({origin: "https://focus-giurgiu.ro", credentials: true}));
 const limiter = rateLimit({
     windowMs: 10 * 60000,
     max: 300,
