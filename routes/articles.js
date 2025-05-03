@@ -212,4 +212,25 @@ articleRouter.delete('/delete/article', async (req, res) => {
     }  
 })
 
+articleRouter.post('/like/article', async (req, res) => {
+    const { article, liked } = req.body;
+
+    try {
+        const currentArticle = await Article.findOne({_id: article._id});
+
+        if(!currentArticle){
+            return res.status(404).json("Article not found");
+        }
+        
+        currentArticle.likes += liked ? 1 : -1;
+
+        await currentArticle.save();
+
+        return res.json({likes: currentArticle.likes});
+
+    } catch (err) {
+        return res.status(500).json("Internal server error");
+    }  
+});
+
 export default articleRouter;

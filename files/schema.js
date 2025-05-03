@@ -36,6 +36,11 @@ const articleSchema = new mongoose.Schema({
     imageUrl: {
         type: String,
         required: true
+    },
+    likes: {
+        type: Number,
+        default: 0,
+        min: 0
     }
 }, {timestamps: true})
 
