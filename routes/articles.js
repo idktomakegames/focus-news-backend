@@ -212,49 +212,5 @@ articleRouter.delete('/delete/article', async (req, res) => {
     }  
 })
 
-articleRouter.post('/like/article', async (req, res) => {
-    const { article, liked } = req.body;
-    const token = req.cookies.jwt;
-
-    const decode = jwt.verify(token, process.env.JWT_SECRET);
-
-    try {
-        const currentArticle = await Article.findOne({_id: article._id});
-        const userAlreadyLiked = currentArticle.likes.includes(decode.id);
-
-        if(!currentArticle){
-            return res.sendStatus(404);
-        }
-        
-        if(liked && !userAlreadyLiked){
-            currentArticle.likes.push(decode.id)
-        }
-        else if(!liked && userAlreadyLiked){
-            currentArticle.likes.filter(id => id.toString() !== decode.id.toString());
-        }
-
-        await currentArticle.save();
-        return res.sendStatus(204);
-    } catch (err) {
-        console.log(err);
-        return res.sendStatus(500);      
-    }  
-});
-
-articleRouter.get('/total-likes/:article', async (req, res) => {
-    const articleID = req.params.article;
-
-    try {
-        const currentArticle = await Article.findOne({_id: articleID})
-
-        if(!currentArticle){
-            return res.status(404).json("Article not found")
-        }
-
-        return res.json(currentArticle.likes);
-    } catch (error) {
-        return res.status.json("Internal Server Error")
-    }
-})
 
 export default articleRouter;

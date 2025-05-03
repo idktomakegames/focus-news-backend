@@ -36,9 +36,7 @@ const articleSchema = new mongoose.Schema({
     imageUrl: {
         type: String,
         required: true
-    },
-    likes: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}]
-        
+    },      
 }, {timestamps: true})
 
 export const User = mongoose.model("User", userSchema);
