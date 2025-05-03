@@ -226,7 +226,8 @@ articleRouter.post('/like/article', async (req, res) => {
         await currentArticle.save();
         return res.sendStatus(204);
     } catch (err) {
-        return res.sendStatus(500);
+        console.log(err);
+        return res.sendStatus(500);      
     }  
 });
 
