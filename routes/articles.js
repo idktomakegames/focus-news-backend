@@ -222,7 +222,13 @@ articleRouter.post('/like/article', async (req, res) => {
             return res.sendStatus(404);
         }
         
-        currentArticle.likes += liked ? 1 : -1;
+        if(liked){
+            currentArticle.likes += 1
+        }
+        else if(currentArticle.likes > 0){
+            currentArticle.likes -= 1
+        }
+        
         await currentArticle.save();
         return res.sendStatus(204);
     } catch (err) {
