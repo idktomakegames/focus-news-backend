@@ -99,4 +99,32 @@ authRouter.get('/logout', (req, res) => {
     return res.clearCookie("jwt", {httpOnly: true, secure: true, sameSite: "none", maxAge: 0, path: '/'}).sendStatus(204);
 });
 
+authRouter.post('/update', async (req, res) => {
+    const { username, email } = req.body;
+    const token = req.cookies.jwt;
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+    const user = await User.findOne({_id: decoded.id});
+
+    if(!user){
+        return res.status(404).json("Resursa solicitată nu a putut fi recuperată");
+    }
+
+    if(username === user.username || email === user.email){
+        return res.status(400).json("Datele introduse trebuie să fie diferite de cele vechi")
+    }
+
+    if(username){
+        user.username = username
+    }
+
+    if(email){
+        user.email = email
+    }
+
+    await user.save();
+    return res.json("Datele au fost schimbate cu succes")
+});
+
 export default authRouter;
