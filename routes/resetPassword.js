@@ -13,32 +13,36 @@ resetRouter.post("/reset-password", async (req, res) => {
     const user = await User.findOne({email: email});
 
     try {
-        const transporter = nodemailer.createTransport({
-        service: "gmail",
-        secure: true,
-        auth: {
-            user: "redactiafocusgiurgiu@gmail.com",
-            pass: process.env.EMAIL_PASS
-        }
-    });
-
     const token = jwt.sign({
         id: user._id,
         email: email
     }, process.env.JWT_SECRET, { expiresIn: "3m"});
 
-    const link = `https://focus-giurgiu.netlify.app/reset/password/${token}`
+    const link = `https://focus-giurgiu.ro/reset/password/${token}`
 
     const html = `<p>Salutare,</p><p>Urmează acest link pentru a-ți reseta parola pentru contul ${email}</p> <a href='${link}'>${link}</a><p>Dacă nu ați solicitat pentru resetarea parolei, puteți ignora acest email.</p> <p>@Focus Giurgiu</p>`
 
-    transporter.sendMail({
-        from: "redactiafocusgiurgiu@gmail.com",
-        to: email,
-        subject: "Reset Password",
-        html: html
-    });
 
-    console.log("email sent")
+    const sendEmail = (service) => {
+        return nodemailer.createTransport({
+            service: service,
+            secure: true,
+            auth: {
+                user: "redactiafocusgiurgiu@gmail.com",
+                pass: process.env.EMAIL_PASS
+            }
+        }).sendMail({
+            from: "redactiafocusgiurgiu@gmail.com",
+            to: email,
+            subject: "Reset Password",
+            html: html
+        });
+    };
+
+    await Promise.all([
+        sendEmail("gmail"),
+        sendEmail("yahoo")
+    ]);
     return res.json("Dacă există un cont asociat adresei de email vei primi un link de reset.")
     } catch (error) {
         return res.status(500).json("Eroare la trimiterea emailului")
