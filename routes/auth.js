@@ -127,7 +127,11 @@ authRouter.post('/update', async (req, res) => {
     }
 
     await user.save();
-    return res.clearCookie("jwt", {httpOnly: true, secure: true, sameSite: "none", maxAge: 0, path: '/'}).json({message: "Datele au fost schimbate cu succes, re-autentificare necesară", username: user.username})
+    return res.json({message: "Datele au fost schimbate cu succes, re-autentificare necesară", username: user.username}).then(() => {
+        setTimeout(() => {
+            clearCookie("jwt", {httpOnly: true, secure: true, sameSite: "none", maxAge: 0, path: '/'})
+        }, 1000)
+    })
 });
 
 export default authRouter;
