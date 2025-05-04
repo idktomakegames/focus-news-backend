@@ -108,11 +108,11 @@ authRouter.post('/update', async (req, res) => {
     const user = await User.findOne({_id: decoded.id});
 
     if(!user){
-        return res.status(404).json("Resursa solicitată nu a putut fi recuperată");
+        return res.status(404).json({message: "Resursa solicitată nu a putut fi recuperată"});
     }
 
     if(username === user.username || email === user.email){
-        return res.status(400).json("Datele introduse trebuie să fie diferite de cele vechi")
+        return res.status(400).json({message: "Datele introduse trebuie să fie diferite de cele vechi"})
     }
 
     if(username){
@@ -121,8 +121,7 @@ authRouter.post('/update', async (req, res) => {
 
     if(email){
         if(!email.includes("@") && email.length < 10){
-            setError('Invalid email');
-            return;
+            return res.status(400).json({message: "Email invalid"});
           }
         user.email = email
     }
