@@ -120,11 +120,15 @@ authRouter.post('/update', async (req, res) => {
     }
 
     if(email){
+        if(!email.includes("@") && email.length < 10){
+            setError('Invalid email');
+            return;
+          }
         user.email = email
     }
 
     await user.save();
-    return res.json("Datele au fost schimbate cu succes")
+    return res.json({message: "Datele au fost schimbate cu succes", username: user.username})
 });
 
 export default authRouter;
