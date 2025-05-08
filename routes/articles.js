@@ -140,6 +140,22 @@ articleRouter.get('/get-articles/category/sanatate/:page', async (req, res) => {
     return res.json({totalPages: totalPages, articles: articles})
 });
 
+articleRouter.get('/get-articles/category/politica/:page', async (req, res) => {
+    
+    const { page } = req.params;
+    
+    const currentPage = parseInt(page)
+
+    if(isNaN(currentPage) || currentPage < 1){
+        return res.sendStatus(400);
+    }
+    
+    const articles = await Article.find({category: "politica"}).sort({createdAt: -1}).skip((currentPage - 1) * 9).limit(9);
+    const totalArticles = await Article.countDocuments({category: "politica"});
+    const totalPages = Math.ceil(totalArticles / 9)
+    return res.json({totalPages: totalPages, articles: articles})
+});
+
 articleRouter.get('/get-articles/category/tragedii/:page', async (req, res) => {
     
     const { page } = req.params;
