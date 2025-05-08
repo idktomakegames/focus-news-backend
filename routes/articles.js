@@ -161,12 +161,14 @@ articleRouter.get('/article/:id', async (req, res) => {
     console.log(id);
     
     const article = await Article.findOne({_id: id});
-    article.views += 1
-    article.save();
 
     if(article == null){
         return res.status(404).json("Article not found")
     }
+
+    article.views += 1
+    article.save();
+
     return res.json(article);
     
 });
