@@ -192,7 +192,7 @@ articleRouter.get('/article/:id', async (req, res) => {
 articleRouter.get('/search/:query', async (req, res) => {
     const query = req.params.query;
 
-    const articles = await Article.find({title: {$regex: new RegExp(query, 'i')}}).limit(9);
+    const articles = await Article.find({title: {$regex: new RegExp(query, 'i')}}).limit(15);
 
     if(articles.length === 0){
         return res.status(404).json("Nu au fost găsite articole.")
