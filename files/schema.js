@@ -36,7 +36,10 @@ const articleSchema = new mongoose.Schema({
     imageUrl: {
         type: String,
         required: true
-    },      
+    },    
+    views: {
+        type: Number
+    }  
 }, {timestamps: true})
 
 export const User = mongoose.model("User", userSchema);
