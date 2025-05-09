@@ -20,8 +20,9 @@ authRouter.get('/check/permissions', (req, res) => {
         
         const username = decode.username;
         const role = decode.role;
+        const email = decode.email;
         
-        return res.json({username: username, role: role});
+        return res.json({username: username, role: role, email: email});
     })
 })
 
