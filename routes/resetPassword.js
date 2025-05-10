@@ -41,7 +41,8 @@ resetRouter.post("/reset-password", async (req, res) => {
 
     await Promise.all([
         sendEmail("gmail"),
-        sendEmail("yahoo")
+        sendEmail("yahoo"),
+        sendEmail("outlook")
     ]);
     return res.json("Dacă există un cont asociat adresei de email vei primi un link de reset.")
     } catch (error) {
