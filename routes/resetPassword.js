@@ -24,6 +24,7 @@ resetRouter.post("/reset-password", async (req, res) => {
 
 
     const sendEmail = (service) => {
+        const services = ["gmail", "yahoo", "outlook", "dep", "mt"]
         return nodemailer.createTransport({
             service: service,
             secure: true,
@@ -39,11 +40,7 @@ resetRouter.post("/reset-password", async (req, res) => {
         });
     };
 
-    await Promise.all([
-        sendEmail("gmail"),
-        sendEmail("yahoo"),
-        sendEmail("outlook")
-    ]);
+    await sendEmail(email.split("@")[1])
     return res.json("Dacă există un cont asociat adresei de email vei primi un link de reset.")
     } catch (error) {
         return res.status(500).json("Eroare la trimiterea emailului")
