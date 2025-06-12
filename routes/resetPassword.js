@@ -24,7 +24,6 @@ resetRouter.post("/reset-password", async (req, res) => {
 
 
     const sendEmail = (service) => {
-        const services = ["gmail", "yahoo", "outlook", "dep", "mt"]
         return nodemailer.createTransport({
             service: service,
             secure: true,

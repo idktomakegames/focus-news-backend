@@ -228,8 +228,44 @@ articleRouter.delete('/delete/article', async (req, res) => {
         await Article.deleteOne({_id: article._id});
         return res.json({message: "Article deleted successfully"});
     } catch (err) {
-        return res.status(500).json("Internal server error");
+        return res.status(500).json({message: "Internal server error"});
     }  
+})
+
+articleRouter.post('/update/article', async (req, res) => {
+    const { query, title, content } = req.body;
+    const token = req.cookies.jwt;
+
+    if(!token){
+        return res.status(401).json("Something went wrong")
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if(decoded.role !== 'admin'){
+        return res.status(403).json("Something went wrong")
+    }
+
+    try {
+
+        const article = await Article.findOne({_id: query});
+
+        if(!article){
+            return res.status(404).json("Nu au fost găsite articole")
+        }
+
+        if(title === article.title || content === article.content){
+            return res.status(400).json("Nu au fost făcute modificări")
+        }
+
+        article.title = title;
+        article.content = content;
+        article.save();
+        return res.json("Modificarea a fost efectuată cu succes")
+    
+    } catch (error) {
+        return res.status(500).json({message: "Internal server error"})
+    }
 })
 
 
