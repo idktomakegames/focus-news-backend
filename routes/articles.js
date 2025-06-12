@@ -254,10 +254,6 @@ articleRouter.post('/update/article', async (req, res) => {
             return res.status(404).json("Nu au fost găsite articole")
         }
 
-        if(title === article.title || content === article.content){
-            return res.status(400).json("Nu au fost făcute modificări")
-        }
-
         article.title = title;
         article.content = content;
         article.save();
