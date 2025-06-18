@@ -23,15 +23,19 @@ const storage = new CloudinaryStorage({
 
 const uploader = multer({storage: storage})
 
-articleRouter.post('/upload-image', uploader.single("articleImg"), (req, res) => {
+articleRouter.post('/upload-image1', uploader.single("articleImg1"), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: "No file uploaded" });
     }
     return res.status(201).json({imageUrl: req.file.path})
 });
 
+articleRouter.post('/upload-image2', uploader.single("articleImg2"), (req, res) => {
+    return res.status(201).json({imageUrl2: req.file.path})
+});
+
 articleRouter.post('/post-article', async (req, res) => {
-    const { title, content, category, imageUrl } = req.body;
+    const { title, content, category, imageUrl, imageUrl2 } = req.body;
     const token = req.cookies.jwt;
     
 
@@ -61,11 +65,12 @@ articleRouter.post('/post-article', async (req, res) => {
     }
 
     try {
-        const article = await Article.create({
+        await Article.create({
         title: title,
         content: content,
         category: category,
-        imageUrl: imageUrl
+        imageUrl: imageUrl,
+        imageUrl2: imageUrl2
     });
 
     return res.status(201).json("Article uploaded successfully")

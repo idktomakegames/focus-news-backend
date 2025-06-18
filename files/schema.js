@@ -37,6 +37,10 @@ const articleSchema = new mongoose.Schema({
         type: String,
         required: true
     },    
+    imageUrl2: {
+        type: String,
+        required: false
+    },
     views: {
         type: Number,
         default: 0
