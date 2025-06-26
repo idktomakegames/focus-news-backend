@@ -90,11 +90,23 @@ articleRouter.get('/get-articles/:page/:sort', async (req, res) => {
     if(isNaN(currentPage) || currentPage < 1){
         return res.sendStatus(400);
     }
-    
-    const articles = await Article.find().sort({createdAt: -1}).skip((currentPage - 1) * 9).limit(9);
+    let articles;
+    switch(sort){
+        case "newest":
+            articles = await Article.find().sort({createdAt: -1}).skip((currentPage - 1) * 9).limit(9);
+            break;
+        case "oldest":
+            articles = await Article.find().sort({createdAt: 1}).skip((currentPage - 1) * 9).limit(9);
+            break;
+        case "popular":
+            articles = await Article.find().sort({views: -1}).skip((currentPage - 1) * 9).limit(9);
+            break;
+    }
+
     const totalArticles = await Article.countDocuments();
     const totalPages = Math.ceil(totalArticles / 9)
     return res.json({totalPages: totalPages, articles: articles})
+    
 });
 
 articleRouter.get('/get-articles/category/economie/:page', async (req, res) => {
