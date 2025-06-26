@@ -79,10 +79,11 @@ articleRouter.post('/post-article', async (req, res) => {
     } 
 });
 
-articleRouter.get('/get-articles/:page', async (req, res) => {
+articleRouter.get('/get-articles/:page/:sort', async (req, res) => {
     const { page } = req.params;
+    const { sort } = req.params;
     console.log(page);
-    
+    console.log(sort);
     
     const currentPage = parseInt(page)
 
