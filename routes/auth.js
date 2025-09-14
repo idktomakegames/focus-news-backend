@@ -117,6 +117,7 @@ authRouter.post('/login', async (req, res) => {
             return res.status(401).json("Autentificare eșuată");
         }
     } catch (err) {
+        console.log(err.message);
         return res.status(500).json("Eroare internă a serverului. Te rugăm să încerci din nou mai târziu.")
     }
 });
