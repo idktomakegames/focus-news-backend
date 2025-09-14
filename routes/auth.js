@@ -4,25 +4,31 @@ import { User } from "../files/schema.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-authRouter.get('/check/permissions', (req, res) => {
-    const token = req.cookies.jwt;
-    console.log(req.cookies);
+authRouter.get('/refresh', (req, res) => {
+    const refreshToken = req.cookies.refresh;
     
 
-    if(!token){
+    if(!refreshToken){
         return res.status(401).json("Unauthorized");
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
+    jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decode) => {
         if(err){
             return res.status(403).json("Forbidden");
         }
         
-        const username = decode.username;
-        const role = decode.role;
-        const email = decode.email;
+        const { username, role, email } = decode
+
+        const token = jwt.sign({ 
+            id: id, 
+            username: username, 
+            email: email, 
+            role: role },
+            process.env.JWT_SECRET,
+            { expiresIn: "15s" }
+        );
         
-        return res.json({username: username, role: role, email: email});
+        return res.cookie("jwt", token, { httpOnly: true, secure: true, sameSite: "none", maxAge: 15 * 1000 }).json({username: username, role: role, email: email});
     })
 })
 
@@ -54,9 +60,19 @@ authRouter.post('/signup', async (req, res) => {
             username: username,
             email: email,
             role: newUser.role
-        }, process.env.JWT_SECRET, {expiresIn: "48h"});
-        console.log(newUser);
-        return res.cookie("jwt", token, {httpOnly: true, secure: true, sameSite: "none", maxAge: 48 * 60 * 60 * 1000, path: '/'}).status(201).json("Contul a fost creat cu succes");
+        }, process.env.JWT_SECRET, {expiresIn: "15m"});
+
+        const refreshToken = jwt.sign({
+            id: newUser._id,
+            username: username,
+            email: email,
+            role: newUser.role
+        }, process.env.REFRESH_SECRET, {expiresIn: "7d"});
+
+        res.cookie("jwt", token, {httpOnly: true, secure: true, sameSite: "none", maxAge: 15 * 60 * 1000, path: '/'})
+        res.cookie("refresh", refreshToken, {httpOnly: true, secure: true, sameSite: "none", maxAge: 7 * 24 * 60 * 60 * 1000, path: '/'})
+
+        return res.status(201).json("Contul a fost creat cu succes");
 
     } catch (err) {
         return res.status(500).json("Eroare internă a serverului. Te rugăm să încerci din nou mai târziu.")
@@ -84,9 +100,19 @@ authRouter.post('/login', async (req, res) => {
                 username: user.username,
                 email: email,
                 role: user.role
-            }, process.env.JWT_SECRET, {expiresIn: "48h"});
+            }, process.env.JWT_SECRET, {expiresIn: "15m"});
 
-            return res.cookie("jwt", token, {httpOnly: true, secure: true, sameSite: "none", maxAge: 48 * 60 * 60 * 1000, path: '/'}).json("Autentificare reușită!");
+            const refreshToken = jwt.sign({
+                id: user._id,
+                username: user.username,
+                email: email,
+                role: user.role
+            }, process.env.REFRESH_SECRET, {expiresIn: "7d"});
+
+            res.cookie("jwt", token, {httpOnly: true, secure: true, sameSite: "none", maxAge: 15 * 60 * 1000, path: '/'})
+            res.cookie("refresh", refreshToken, {httpOnly: true, secure: true, sameSite: "none", maxAge: 7 * 24 * 60 * 60 * 1000, path: '/'})
+
+            return res.json("Autentificare reușită!");
         } else {
             return res.status(401).json("Autentificare eșuată");
         }
@@ -96,8 +122,9 @@ authRouter.post('/login', async (req, res) => {
 });
 
 
-authRouter.get('/logout', (req, res) => {
-    return res.clearCookie("jwt", {httpOnly: true, secure: true, sameSite: "none", maxAge: 0, path: '/'}).sendStatus(204);
+authRouter.get('/logout', (_, res) => {
+    res.clearCookie("jwt", {httpOnly: true, secure: true, sameSite: "none", maxAge: 0, path: '/'});
+    res.clearCookie("refresh", {httpOnly: true, secure: true, sameSite: "none", maxAge: 0, path: '/'});
 });
 
 authRouter.post('/update', async (req, res) => {
