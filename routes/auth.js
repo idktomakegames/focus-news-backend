@@ -27,6 +27,7 @@ authRouter.get('/refresh', (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: "15s" }
         );
+        console.log(token);
         
         return res.cookie("jwt", token, { httpOnly: true, secure: true, sameSite: "none", maxAge: 15 * 1000 }).json({username: username, role: role, email: email});
     })
