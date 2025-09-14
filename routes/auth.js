@@ -127,6 +127,7 @@ authRouter.post('/login', async (req, res) => {
 authRouter.get('/logout', (_, res) => {
     res.clearCookie("jwt", {httpOnly: true, secure: true, sameSite: "none", maxAge: 0, path: '/'});
     res.clearCookie("refresh", {httpOnly: true, secure: true, sameSite: "none", maxAge: 0, path: '/'});
+    return res.send()
 });
 
 authRouter.post('/update', async (req, res) => {
