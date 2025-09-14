@@ -12,12 +12,12 @@ authRouter.get('/refresh', (req, res) => {
         return res.status(401).json("Unauthorized");
     }
 
-    jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decode) => {
+    jwt.verify(refreshToken, process.env.REFRESH_SECRET, (err, decode) => {
         if(err){
             return res.status(403).json("Forbidden");
         }
         
-        const { username, role, email } = decode
+        const { id, username, role, email } = decode
 
         const token = jwt.sign({ 
             id: id, 
